@@ -2,10 +2,15 @@ from django.db import models
 from django.contrib.auth.models import User
 from doctor.models import *
 from django.core.exceptions import ValidationError
+from django.conf import settings
 
 
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="patient_profile")
+    first_name = models.CharField(max_length=20, blank=True, null=True)
+    last_name = models.CharField(max_length=20, blank=True, null=True)
+
+
 
     # Extra patient info
     patient_id = models.CharField(max_length=20, unique=True)  # E-Card / Hospital ID
@@ -17,6 +22,7 @@ class Patient(models.Model):
     date_of_birth = models.DateField()
 
     phone_number = models.CharField(max_length=20, blank=True, null=True)
+    
     address = models.TextField(blank=True, null=True)
 
     # Emergency Contact
@@ -86,11 +92,20 @@ class Appointment(models.Model):
 class Prescription(models.Model):
     patient = models.ForeignKey("Patient", on_delete=models.CASCADE, related_name="prescriptions")
     doctor = models.ForeignKey("doctor.Doctor", on_delete=models.CASCADE, related_name="prescriptions")
-    title= models.CharField(max_length=50, blank=True, null=True,)
     appointment = models.ForeignKey("Appointment", on_delete=models.SET_NULL, blank=True, null=True, related_name="prescriptions")
+
+    title = models.CharField(max_length=100, blank=True, null=True)  # e.g. "Cardiology Prescription"
+    department = models.CharField(max_length=100, blank=True, null=True)  # e.g. "Cardiology OP"
+    consultation_type = models.CharField(max_length=50, blank=True, null=True)  # e.g. "Video" / "In-person"
 
     diagnosis = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
+
+    advice = models.TextField(blank=True, null=True)  # for "Advice" section
+    follow_up_notes = models.TextField(blank=True, null=True)  # e.g. "Follow up after 3 months"
+    follow_up_date = models.DateField(blank=True, null=True)  # optional structured follow-up date
+
+    doctor_signature = models.ImageField(upload_to="doctor_signatures/", blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -103,16 +118,17 @@ class PrescriptionItem(models.Model):
     
     medicine_name = models.CharField(max_length=100)
     dosage = models.CharField(max_length=50, help_text="e.g. 500mg, 1 tablet")
-    frequency = models.CharField(max_length=50, help_text="e.g. Twice a day")
-    duration = models.CharField(max_length=50, help_text="e.g. 5 days")
-    instructions = models.TextField(blank=True, null=True, help_text="Additional instructions (e.g. Take after meals)")
+    frequency = models.CharField(max_length=50, help_text="e.g. 1-0-1, Twice a day")
+    duration = models.CharField(max_length=50, help_text="e.g. 5 days, 1 month")
+    timings = models.CharField(max_length=100, blank=True, null=True, help_text="e.g. Before meal, After meal")
+    instructions = models.TextField(blank=True, null=True, help_text="Additional instructions")
 
     def __str__(self):
         return f"{self.medicine_name} - {self.dosage} for {self.prescription.patient.user.get_full_name()}"
 
 
 
-from django.conf import settings
+
 
 class PatientActivity(models.Model):
     CATEGORY_CHOICES = [

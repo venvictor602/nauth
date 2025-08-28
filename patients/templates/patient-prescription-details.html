@@ -1,0 +1,160 @@
+{%extends 'base.html'%}
+{%load static%}
+{%block content%}
+
+    <!-- Begin Wrapper -->
+    <div class="main-wrapper">
+
+
+         
+        <div class="page-wrapper">
+
+            <!-- Start Content -->
+            <div class="content">
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        <!-- Header -->
+                        <div class="d-flex align-items-sm-center flex-sm-row flex-column mb-4">
+                            <div class="flex-grow-1">
+                                <h6 class="fs-14 fw-semibold mb-0 d-flex align-items-center">
+                                    <a href="{% url 'prescription' %}" class="me-1"><i class="ti ti-chevron-left"></i> Prescriptions </a>
+                                </h6>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <!-- Prescription ID -->
+                                <div class="d-flex align-items-center justify-content-between border-bottom pb-3 mb-3">
+                                    <div class="invoice-logo">
+                                        <img src="/static/assets/img/logo.svg" alt="logo">
+                                    </div>
+                                    <span class="badge bg-info-subtle text-info-emphasis fs-13 fw-medium border border-primary py-1 px-2">
+                                        #PRE{{ prescription.id|stringformat:"04d" }}
+                                    </span>
+                                </div>
+
+                                <!-- Doctor & Department -->
+                                <div class="d-flex align-items-center justify-content-between border-bottom pb-3 mb-3 flex-wrap gap-2">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="avatar avatar-xxl rounded bg-light border p-2">
+                                            <img src="/static/assets/img/icons/trust-care.svg" alt="favicon.png" class="img-fluid img1">
+                                        </div>
+                                        <div>
+                                            <h6 class="text-dark fw-semibold mb-1">Trustcare Clinic</h6>
+                                            <p class="mb-1"> Dr. {{ doctor.first_name }} {{ doctor.last_name }} </p>
+                                            <p class="mb-0">{{ doctor.specialization }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-lg-end">
+                                        <p class="text-dark mb-1"> Department : <span class="text-body">{{ prescription.department }}</span> </p>
+                                        <p class="text-dark mb-1"> Prescribed on : <span class="text-body">{{ prescription.created_at|date:"d M Y, h:i A" }}</span> </p>
+                                        <p class="text-dark mb-0"> Consultation : <span class="text-body">{{ prescription.consultation_type }}</span> </p>
+                                    </div>
+                                </div>
+
+                                <!-- Patient -->
+                                <div class="mb-3">
+                                    <h6 class="mb-2 fs-14 fw-medium"> Patient Details </h6>
+                                    <div class="px-3 py-2 bg-light rounded d-flex align-items-center justify-content-between">
+                                        <h6 class="m-0 fw-semibold fs-16">{{ patient.first_name }} {{ patient.last_name }}</h6>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <p class="mb-0 text-dark">{{ patient.date_of_birth|timesince }} / {{ patient.get_gender_display }}</p>
+                                            <p class="mb-0 text-dark"> Blood: {{ patient.blood_pressure|default:"N/A" }}</p>
+                                            <p class="mb-0 text-dark"> Patient ID: {{ patient.patient_id }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Medicines -->
+                                <div class="mb-4">
+                                    <h6 class="mb-3 fs-16 fw-bold text-center">{{ prescription.title }}</h6>
+                                    <div class="table-responsive border bg-white">
+                                        <table class="table table-nowrap">
+                                            <thead>
+                                                <tr>
+                                                    <th>SNO</th>
+                                                    <th>Medicine Name</th>
+                                                    <th>Dosage</th>
+                                                    <th>Frequency</th>
+                                                    <th>Duration</th>
+                                                    <th>Timings</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for item in items %}
+                                                <tr>
+                                                    <td>{{ forloop.counter }}</td>
+                                                    <td>{{ item.medicine_name }}</td>
+                                                    <td>{{ item.dosage }}</td>
+                                                    <td>{{ item.frequency }}</td>
+                                                    <td>{{ item.duration }}</td>
+                                                    <td>{{ item.timings|default:"-" }}</td>
+                                                </tr>
+                                                {% empty %}
+                                                <tr>
+                                                    <td colspan="6" class="text-center">No medicines prescribed</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Advice -->
+                                {% if prescription.advice %}
+                                <div class="pb-3 mb-3 border-bottom">
+                                    <h6 class="mb-1 fs-16 fw-semibold">Advice</h6>
+                                    <p>{{ prescription.advice }}</p>
+                                </div>
+                                {% endif %}
+
+                                <!-- Follow Up -->
+                                {% if prescription.follow_up_notes or prescription.follow_up_date %}
+                                <div class="pb-3 mb-3 border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                    <div>
+                                        <h6 class="mb-1 fs-16 fw-semibold">Follow Up</h6>
+                                        <p>{{ prescription.follow_up_notes }}</p>
+                                        {% if prescription.follow_up_date %}
+                                        <p class="text-muted">Next Visit: {{ prescription.follow_up_date|date:"d M Y" }}</p>
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        
+                                        <h6 class="fs-14 fw-semibold">Dr. {{ doctor.first_name }} {{ doctor.last_name }}</h6>
+                                        <p class="fs-13 fw-normal">{{ doctor.specialization }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+
+                                <!-- Actions -->
+                                <div class="text-center d-flex align-items-center justify-content-center">
+                                    <a href="#" class="btn btn-md btn-dark me-2 d-flex align-items-center"><i class="ti ti-printer me-1"></i> Print</a>
+                                    <a href="#" class="btn btn-md btn-primary d-flex align-items-center"><i class="ti ti-download me-1"></i> Download</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- End Content -->
+
+             <!-- Footer Start -->
+             <div class="footer text-center bg-white p-2 border-top">
+                <p class="text-dark mb-0">2025 &copy; <a href="javascript:void(0);" class="link-primary">Preclinic</a>, All Rights Reserved</p>
+            </div>
+            <!-- Footer End -->
+
+        </div>
+
+
+
+
+        <!-- ========================
+			End Page Content
+		========================= -->
+
+    </div>
+{%endblock content%}

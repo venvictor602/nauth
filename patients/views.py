@@ -9,6 +9,7 @@ from django.shortcuts import render
 from django.db.models import Count
 from .models import *
 from doctor.models import *
+from django.shortcuts import render, get_object_or_404
 
 
 def patient_login_view(request):
@@ -114,4 +115,26 @@ def patient_dashboard(request):
          "recent_appointments":recent_appointments,
     }
     return render(request, "dashboard.html", context)
+
+
+
+def prescription(request):
+    prescriptions = Prescription.objects.all().order_by("-created_at")
+    return render(request, "patient-prescriptions.html", {"prescriptions": prescriptions})
+
+
+def prescription_detail(request, pk):
+    prescription = get_object_or_404(Prescription, pk=pk)
+
+    # fetch all related items (medications)
+    items = prescription.items.all()
+
+    context = {
+        "prescription": prescription,
+        "items": items,
+        "patient": prescription.patient,
+        "doctor": prescription.doctor,
+    }
+    return render(request, "patient-prescription-details.html", context)
+
 

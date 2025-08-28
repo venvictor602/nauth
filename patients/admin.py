@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import *
+from doctor.models import *
 
 @admin.register(Patient)
 class PatientAdmin(admin.ModelAdmin):
@@ -15,3 +16,5 @@ admin.site.register(Doctor)
 admin.site.register(Prescription)
 
 admin.site.register(PrescriptionItem)
+admin.site.register(Wallet)
+admin.site.register(WalletTransaction)

@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.db.models import Count
 from .models import *
+from doctor.models import *
+
 
 def patient_login_view(request):
     if request.method == "POST":
@@ -36,6 +38,9 @@ def patient_login_view(request):
 @login_required
 def patient_dashboard(request):
     patient = request.user.patient_profile
+
+    wallet = getattr(patient, "wallet", None)
+    wallet_balance = wallet.balance if wallet else 0
 
     # --- Appointments stats ---
     total_appointments = patient.appointments.count()
@@ -81,6 +86,9 @@ def patient_dashboard(request):
     .order_by("-created_at")[:5]
     )
 
+    recent_activities = patient.activities.select_related("created_by")[:5]
+    recent_appointments = Appointment.objects.select_related("doctor", "patient").order_by("-appointment_date")[:5]
+
     context = {
         "patient": patient,
         "total_appointments": total_appointments,
@@ -101,7 +109,9 @@ def patient_dashboard(request):
         "temp":patient.temp,
         "height":patient.height,
         "top_prescriptions": top_prescriptions,   # 👈 added here
+         "recent_activities": recent_activities,
+         "wallet_balance": wallet_balance,   # 👈 Added to context
+         "recent_appointments":recent_appointments,
     }
     return render(request, "dashboard.html", context)
-
 

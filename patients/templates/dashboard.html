@@ -176,7 +176,7 @@
                                             </a>
                                             <div>
                                                 <h6 class="fs-14 mb-1 text-truncate">
-                                                    <a href="{% url 'prescription_detail' prescription.id %}" class="fw-semibold">
+                                                    <a href="" class="fw-semibold">
                                                         {{ prescription.title }}
                                                     </a>
                                                 </h6>
@@ -184,11 +184,11 @@
                                             </div>
                                         </div>
                                         <div class="d-flex align-items-center">
-                                            <a href="{% url 'prescription_detail' prescription.id %}" 
+                                            <a href="" 
                                             class="btn btn-outline-white d-inline-flex align-items-center shadow-sm me-2 p-1">
                                             <i class="ti ti-eye"></i>
                                             </a>
-                                            <a href="{% url 'prescription_download' prescription.id %}" 
+                                            <a href="" 
                                             class="btn btn-outline-white d-inline-flex align-items-center shadow-sm p-1">
                                             <i class="ti ti-download"></i>
                                             </a>
@@ -212,38 +212,36 @@
                             </div>
                             <div class="card-body">
                                 <div class="recent-activity">
+                                    {% for activity in recent_activities %}
                                     <div class="d-flex align-items-center mb-3">
-                                        <span><i class="ti ti-point-filled fs-24 text-success"></i></span>
+                                        {% if activity.category == "appointment" %}
+                                            <span><i class="ti ti-point-filled fs-24 text-success"></i></span>
+                                        {% elif activity.category == "vitals" %}
+                                            <span><i class="ti ti-point-filled fs-24 text-danger"></i></span>
+                                        {% elif activity.category == "therapy" %}
+                                            <span><i class="ti ti-point-filled fs-24 text-warning"></i></span>
+                                        {% elif activity.category == "diet" %}
+                                            <span><i class="ti ti-point-filled fs-24 text-info"></i></span>
+                                        {% else %}
+                                            <span><i class="ti ti-point-filled fs-24 text-muted"></i></span>
+                                        {% endif %}
+
                                         <div class="ms-2">
-                                          <p class="mb-1 text-truncate">Appointment with <a href="javascript:void(0);" class="fw-semibold">Primary Care Physician</a></p>
-                                          <p class="fs-13 mb-0">24 Mar 2025, 10:55 AM</p>
+                                            <p class="mb-1 text-truncate">
+                                                <a href="javascript:void(0);" class="fw-semibold">{{ activity.title }}</a>
+                                                {% if activity.description %} - {{ activity.description }}{% endif %}
+                                            </p>
+                                            <p class="fs-13 mb-0">{{ activity.created_at|date:"d M Y, h:i A" }}</p>
                                         </div>
                                     </div>
-                                    <div class="d-flex align-items-center mb-3">
-                                        <span><i class="ti ti-point-filled fs-24 text-danger"></i></span>
-                                        <div class="ms-2">
-                                          <p class="mb-1 text-truncate"><a href="javascript:void(0);" class="fw-semibold">Blood Pressure Check</a> (Home Monitoring)</p>
-                                          <p class="fs-13 mb-0">24 Apr 2025, 11:00 AM</p>
-                                        </div>
-                                    </div>    
-                                    <div class="d-flex align-items-center mb-3">
-                                        <span><i class="ti ti-point-filled fs-24 text-warning"></i></span>
-                                        <div class="ms-2">
-                                          <p class="mb-1"><a href="javascript:void(0);" class="fw-semibold">Physical Therapy Session</a> Knee strengthening exercises</p>
-                                          <p class="fs-13 mb-0">24 Apr 2025, 11:00 AM</p>
-                                        </div>
-                                    </div>   
-                                    <div class="d-flex align-items-center mb-0">
-                                        <span><i class="ti ti-point-filled fs-24 text-info"></i></span>
-                                        <div class="ms-2">
-                                          <p class="mb-1"><a href="javascript:void(0);" class="fw-semibold">Discuss dietary changes</a> to manage blood sugar levels and weight</p>
-                                          <p class="fs-13 mb-0">24 Apr 2025, 11:00 AM</p>
-                                        </div>
-                                    </div> 
+                                    {% empty %}
+                                    <p class="text-muted">No recent activities found.</p>
+                                    {% endfor %}
                                 </div>                           
                             </div>
                         </div>
                     </div>
+
                     <!-- col end -->
 
                 </div>
@@ -517,22 +515,16 @@
                 <div class="card shadow-sm flex-fill w-100">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         <h5 class="fw-bold mb-0">Recent Appointments</h5> 
-                        <div class="dropdown">
+                        {% comment %} <div class="dropdown">
                             <a href="javascript:void(0);" class="btn btn-sm px-2 border shadow-sm btn-outline-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
                                 Weekly <i class="ti ti-chevron-down ms-1"></i>
                             </a>
                             <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="#">Monthly</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#">Weekly</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#">Yearly</a>
-                                </li>
+                                <li><a class="dropdown-item" href="#">Monthly</a></li>
+                                <li><a class="dropdown-item" href="#">Weekly</a></li>
+                                <li><a class="dropdown-item" href="#">Yearly</a></li>
                             </ul>
-                        </div>
+                        </div> {% endcomment %}
                     </div>
                     <div class="card-body">
                         <!-- Table start -->
@@ -549,23 +541,41 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {% for appointment in recent_appointments %}
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <a href="javascript:void(0);" class="avatar me-2">
-                                                    <img src="assets/img/doctors/doctor-01.jpg" alt="img" class="rounded-circle">
+                                                    <i class="ti ti-user text-body fs-20"></i>
                                                 </a>
                                                 <div>
-                                                  <h6 class="fs-14 mb-1"><a href="javascript:void(0);" class="fw-semibold">Dr. Mick Thompson</a></h6>
-                                                  <p class="mb-0 fs-13">Cardiologist</p>
+                                                    <h6 class="fs-14 mb-1">
+                                                        <a href="javascript:void(0);" class="fw-semibold">
+                                                            Dr. {{ appointment.doctor.first_name }} {{ appointment.doctor.last_name }}
+                                                        </a>
+                                                    </h6>
+                                                    <p class="mb-0 fs-13">{{ appointment.doctor.specialization }}</p>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>27 May 2025 - 09:30 AM</td>
-                                        <td class="fw-semibold text-dark">$400</td>
-                                        <td>Online</td>
-                                        <td><span class="badge bg-success fw-medium">Checked Out</span></td>                                        
+                                        <td>{{ appointment.appointment_date|date:"d M Y - h:i A" }}</td>
+                                        <td class="fw-semibold text-dark">₦ {{ appointment.doctor.fee }}</td>
+                                        <td>In Person</td>
                                         <td>
+                                            {% if appointment.status == "ACCEPTED" %}
+                                                <span class="badge bg-success fw-medium">Accepted</span>
+                                            {% elif appointment.status == "PENDING" %}
+                                                <span class="badge bg-warning fw-medium">Pending</span>
+                                            {% elif appointment.status == "REJECTED" %}
+                                                <span class="badge bg-danger fw-medium">Rejected</span>
+                                            {% elif appointment.status == "CANCELLED" %}
+                                                <span class="badge bg-secondary fw-medium">Cancelled</span>
+                                            {% else %}
+                                                <span class="badge bg-info fw-medium">{{ appointment.status|title }}</span>
+                                            {% endif %}
+                                        </td>
+
+                                        {% comment %} <td>
                                             <a href="javascript:void(0);" class="shadow-sm fs-14 d-inline-flex border rounded-2 p-1 me-1">
                                                 <i class="ti ti-calendar-plus"></i>
                                             </a>
@@ -574,152 +584,30 @@
                                             </a>
                                             <ul class="dropdown-menu p-2">
                                                 <li>
-                                                    <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-bs-toggle="offcanvas" data-bs-target="#edit_appointment"><i class="ti ti-edit me-2"></i>Edit</a>
+                                                    <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-bs-toggle="offcanvas" data-bs-target="#edit_appointment">
+                                                        <i class="ti ti-edit me-2"></i>Edit
+                                                    </a>
                                                 </li>
                                                 <li>
-                                                    <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
+                                                    <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#delete_modal">
+                                                        <i class="ti ti-trash me-2"></i>Delete
+                                                    </a>
                                                 </li>
                                             </ul>
-                                        </td>
+                                        </td> {% endcomment %}
                                     </tr>
+                                    {% empty %}
                                     <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <a href="javascript:void(0);" class="avatar me-2">
-                                                    <img src="assets/img/doctors/doctor-09.jpg" alt="img" class="rounded-circle">
-                                                </a>
-                                                <div>
-                                                  <h6 class="fs-14 mb-1"><a href="javascript:void(0);" class="fw-semibold">Dr. Sarah Johnson</a></h6>
-                                                  <p class="mb-0 fs-13">Orthopedic Surgeon</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>26 May 2025 - 10:15 AM</td>
-                                        <td class="fw-semibold text-dark">$370</td>
-                                        <td>Online</td>
-                                        <td><span class="badge bg-warning fw-medium">Checked in</span></td>                                        
-                                        <td>
-                                            <a href="javascript:void(0);" class="shadow-sm fs-14 d-inline-flex border rounded-2 p-1 me-1">
-                                                <i class="ti ti-calendar-plus"></i>
-                                            </a>
-                                            <a href="javascript:void(0);" data-bs-toggle="dropdown" class="shadow-sm fs-14 d-inline-flex border rounded-2 p-1">
-                                                <i class="ti ti-dots-vertical"></i>
-                                            </a>
-                                            <ul class="dropdown-menu p-2">
-                                                <li>
-                                                    <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-bs-toggle="offcanvas" data-bs-target="#edit_appointment"><i class="ti ti-edit me-2"></i>Edit</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
-                                                </li>
-                                            </ul>
-                                        </td>
+                                        <td colspan="6" class="text-center text-muted">No appointments found</td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <a href="javascript:void(0);" class="avatar me-2">
-                                                    <img src="assets/img/doctors/doctor-03.jpg" alt="img" class="rounded-circle">
-                                                </a>
-                                                <div>
-                                                  <h6 class="fs-14 mb-1"><a href="javascript:void(0);" class="fw-semibold">Dr. Emily Carter</a></h6>
-                                                  <p class="mb-0 fs-13">Pediatrician</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>25 May 2025 - 02:40 PM</td>
-                                        <td class="fw-semibold text-dark">$450</td>
-                                        <td>In-Person</td>
-                                        <td><span class="badge bg-danger fw-medium">Cancelled</span></td>                                        
-                                        <td>
-                                            <a href="javascript:void(0);" class="shadow-sm fs-14 d-inline-flex border rounded-2 p-1 me-1">
-                                                <i class="ti ti-calendar-plus"></i>
-                                            </a>
-                                            <a href="javascript:void(0);" data-bs-toggle="dropdown" class="shadow-sm fs-14 d-inline-flex border rounded-2 p-1">
-                                                <i class="ti ti-dots-vertical"></i>
-                                            </a>
-                                            <ul class="dropdown-menu p-2">
-                                                <li>
-                                                    <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-bs-toggle="offcanvas" data-bs-target="#edit_appointment"><i class="ti ti-edit me-2"></i>Edit</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <a href="javascript:void(0);" class="avatar me-2">
-                                                    <img src="assets/img/doctors/doctor-04.jpg" alt="img" class="rounded-circle">
-                                                </a>
-                                                <div>
-                                                  <h6 class="fs-14 mb-1"><a href="javascript:void(0);" class="fw-semibold">Dr. David Lee</a></h6>
-                                                  <p class="mb-0 fs-13">Gynecologist</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>24 May 2025 - 11:30 AM</td>
-                                        <td class="fw-semibold text-dark">$310</td>
-                                        <td>In-Person</td>
-                                        <td><span class="badge bg-info fw-medium">Schedule</span></td>                                        
-                                        <td>
-                                            <a href="javascript:void(0);" class="shadow-sm fs-14 d-inline-flex border rounded-2 p-1 me-1">
-                                                <i class="ti ti-calendar-plus"></i>
-                                            </a>
-                                            <a href="javascript:void(0);" data-bs-toggle="dropdown" class="shadow-sm fs-14 d-inline-flex border rounded-2 p-1">
-                                                <i class="ti ti-dots-vertical"></i>
-                                            </a>
-                                            <ul class="dropdown-menu p-2">
-                                                <li>
-                                                    <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-bs-toggle="offcanvas" data-bs-target="#edit_appointment"><i class="ti ti-edit me-2"></i>Edit</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <a href="javascript:void(0);" class="avatar me-2">
-                                                    <img src="assets/img/doctors/doctor-05.jpg" alt="img" class="rounded-circle">
-                                                </a>
-                                                <div>
-                                                  <h6 class="fs-14 mb-1"><a href="javascript:void(0);" class="fw-semibold">Dr. Anna Kim</a></h6>
-                                                  <p class="mb-0 fs-13">Psychiatrist</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>23 May 2025 - 04:10 PM</td>
-                                        <td class="fw-semibold text-dark">$400</td>
-                                        <td>Online</td>
-                                        <td><span class="badge bg-info fw-medium">Schedule</span></td>                                        
-                                        <td>
-                                            <a href="javascript:void(0);" class="shadow-sm fs-14 d-inline-flex border rounded-2 p-1 me-1">
-                                                <i class="ti ti-calendar-plus"></i>
-                                            </a>
-                                            <a href="javascript:void(0);" data-bs-toggle="dropdown" class="shadow-sm fs-14 d-inline-flex border rounded-2 p-1">
-                                                <i class="ti ti-dots-vertical"></i>
-                                            </a>
-                                            <ul class="dropdown-menu p-2">
-                                                <li>
-                                                    <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-bs-toggle="offcanvas" data-bs-target="#edit_appointment"><i class="ti ti-edit me-2"></i>Edit</a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash me-2"></i>Delete</a>
-                                                </li>
-                                            </ul>
-                                        </td>
-                                    </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                         <!-- Table end -->
                     </div>
                 </div>
+
                 <!-- card end -->
                                 
             </div>

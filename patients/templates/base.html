@@ -374,7 +374,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="patient-appointments.html">
+                                    <a href="{%url 'appointment'%}">
                                         <i class="ti ti-calendar-check"></i><span>Appointments</span>
                                     </a>
                                 </li>
@@ -389,11 +389,11 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="patient-invoices.html">
+                                    <a href="{%url 'invoice_list'%}">
                                         <i class="ti ti-star"></i><span>Invoice</span>
                                     </a>
                                 </li>
-                                <li class="submenu">
+                                {% comment %} <li class="submenu">
                                     <a href="javascript:void(0);">
                                         <i class="ti ti-settings"></i><span>Settings</span>
                                         <span class="menu-arrow"></span>
@@ -403,7 +403,7 @@
                                         <li><a href="patient-password-settings.html">Change Password</a></li>
                                         <li><a href="patient-notifications-settings.html">Notifications</a></li>
                                     </ul>
-                                </li>
+                                </li> {% endcomment %}
                             </ul>
                         </li>
                                         

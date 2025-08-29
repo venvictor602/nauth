@@ -208,3 +208,82 @@ class WalletTransaction(models.Model):
 
 
 
+
+class BaseAbstractModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class AuditAbstractModel(models.Model):
+    created_by = models.ForeignKey(
+        "auth.User", on_delete=models.SET_NULL, null=True, blank=True, related_name="%(class)s_created"
+    )
+    updated_by = models.ForeignKey(
+        "auth.User", on_delete=models.SET_NULL, null=True, blank=True, related_name="%(class)s_updated"
+    )
+
+    class Meta:
+        abstract = True
+
+
+
+
+class Invoice(BaseAbstractModel, AuditAbstractModel):
+    number = models.CharField(max_length=50, unique=True)  # e.g. INV0025
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name="invoices")
+    issued_on = models.DateField()
+    due_date = models.DateField()
+    
+    status = models.CharField(
+        max_length=20,
+        choices=[
+            ("draft", "Draft"),
+            ("sent", "Sent"),
+            ("paid", "Paid"),
+            ("overdue", "Overdue"),
+            ("cancelled", "Cancelled"),
+        ],
+        default="draft",
+    )
+
+    # Totals
+    subtotal = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    cgst = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    sgst = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    discount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    total_in_words = models.CharField(max_length=255, blank=True, null=True)
+
+    # Extra info
+    terms = models.TextField(blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
+    signed_by = models.CharField(max_length=100, blank=True, null=True)
+    signed_role = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        ordering = ["-issued_on"]
+
+    def __str__(self):
+        return f"Invoice {self.number} - {self.patient}"
+
+
+class InvoiceItem(BaseAbstractModel):
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="items")
+    product_name = models.CharField(max_length=150)  # e.g. "Full body checkup"
+    description = models.TextField(blank=True, null=True)
+    unit_cost = models.DecimalField(max_digits=12, decimal_places=2)
+    quantity = models.PositiveIntegerField(default=1)
+    amount = models.DecimalField(max_digits=12, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.product_name} ({self.invoice.number})"
+
+    def save(self, *args, **kwargs):
+        # Auto-calc amount
+        self.amount = self.unit_cost * self.quantity
+        super().save(*args, **kwargs)
+
+

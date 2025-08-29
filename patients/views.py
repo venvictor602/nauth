@@ -117,12 +117,12 @@ def patient_dashboard(request):
     return render(request, "dashboard.html", context)
 
 
-
+@login_required
 def prescription(request):
     prescriptions = Prescription.objects.all().order_by("-created_at")
     return render(request, "patient-prescriptions.html", {"prescriptions": prescriptions})
 
-
+@login_required
 def prescription_detail(request, pk):
     prescription = get_object_or_404(Prescription, pk=pk)
 
@@ -138,3 +138,20 @@ def prescription_detail(request, pk):
     return render(request, "patient-prescription-details.html", context)
 
 
+@login_required
+def appointment(request):
+    appointments = Appointment.objects.select_related("doctor__user", "patient__user").all().order_by("-appointment_date")
+    return render(request, "patient-appointments.html", {"appointments": appointments})
+
+
+@login_required
+# List all invoices
+def invoice_list(request):
+    invoices = Invoice.objects.all().order_by("-issued_on")
+    return render(request, "patient-invoices.html", {"invoices": invoices})
+
+
+@login_required
+def invoice_detail(request, pk):
+    invoice = get_object_or_404(Invoice, pk=pk)
+    return render(request, "invoices/invoice_detail.html", {"invoice": invoice})

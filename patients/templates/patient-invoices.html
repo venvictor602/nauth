@@ -18,23 +18,16 @@
 				<!-- Start Page Header -->
                 <div class="d-flex align-items-sm-center flex-sm-row flex-column gap-2 pb-3 mb-3 border-1 border-bottom">
                     <div class="flex-grow-1">
-                        <h4 class="fw-bold mb-0"> Invoices <span class="badge badge-soft-primary border pt-1 px-2 border-primary fw-medium ms-2 fw-medium fs-13">Total Invoices : 582</span> </h4>
+                    <h4 class="fw-bold mb-0">
+                        Invoices 
+                        <span class="badge badge-soft-primary border pt-1 px-2 border-primary fw-medium ms-2 fw-medium fs-13">
+                            Total Invoices : {{ total_invoices }}
+                        </span>
+                    </h4>
                     </div>
                     <div class="text-end d-flex">
                         <!-- dropdown-->
-                        <div class="dropdown me-1">
-							<a href="javascript:void(0);" class="btn btn-md fs-14 fw-normal border bg-white rounded text-dark d-inline-flex align-items-center"  data-bs-toggle="dropdown">
-								Export<i class="ti ti-chevron-down ms-2"></i>
-							</a>
-							<ul class="dropdown-menu p-2">
-								<li>
-									<a class="dropdown-item" href="#">Download as PDF</a>
-								</li>
-								<li>
-									<a class="dropdown-item" href="#">Download as Excel</a>
-								</li>
-							</ul>
-						</div>
+                       
                     </div>
 				</div>
 				<!-- End Page Header -->
@@ -49,21 +42,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex table-dropdown mb-3 pb-1 right-content align-items-center flex-wrap row-gap-3">
-                        <div class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle btn bg-white btn-md d-inline-flex align-items-center fw-normal rounded border text-dark px-2 py-1 fs-14" data-bs-toggle="dropdown">
-                               <span  class="me-1"> Sort By : </span>  Recent
-                            </a>
-                            <ul class="dropdown-menu  dropdown-menu-end p-2">
-                                <li>
-                                    <a href="javascript:void(0);" class="dropdown-item rounded-1">Recent</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);" class="dropdown-item rounded-1">Oldest</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                   
                 </div>
 
                 <!-- start row -->
@@ -95,7 +74,7 @@
                                                 <!-- Description: Show first item name or "No items" -->
                                                 <td>
                                                     {% if invoice.items.first %}
-                                                        {{ invoice.items.first.product_name }}
+                                                        {{ invoice.notes }}
                                                     {% else %}
                                                         No items
                                                     {% endif %}
@@ -113,7 +92,7 @@
 
                                                 <!-- Total Amount -->
                                                 <td>
-                                                    ${{ invoice.total }}
+                                                     ₦ {{ invoice.total|floatformat:2 }}
                                                 </td>
 
                                                 <!-- Status -->
@@ -150,10 +129,10 @@
                                                         <li>
                                                             <a href="{% url 'invoice_detail' invoice.id %}" class="dropdown-item d-flex align-items-center">View</a>
                                                         </li>
-                                                        <li>
+                                                        {% comment %} <li>
                                                             <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center" 
                                                             data-bs-toggle="modal" data-bs-target="#delete_modal">Delete</a>
-                                                        </li>
+                                                        </li> {% endcomment %}
                                                     </ul>
                                                 </td>
                                             </tr>

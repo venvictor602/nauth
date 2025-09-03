@@ -3,6 +3,10 @@ from django.contrib.auth.models import User
 from doctor.models import *
 from django.core.exceptions import ValidationError
 from django.conf import settings
+from django.db.models import Sum
+from num2words import num2words  # Install with: pip install num2words
+from decimal import Decimal
+
 
 
 class Patient(models.Model):
@@ -217,26 +221,20 @@ class BaseAbstractModel(models.Model):
         abstract = True
 
 
-class AuditAbstractModel(models.Model):
-    created_by = models.ForeignKey(
-        "auth.User", on_delete=models.SET_NULL, null=True, blank=True, related_name="%(class)s_created"
-    )
-    updated_by = models.ForeignKey(
-        "auth.User", on_delete=models.SET_NULL, null=True, blank=True, related_name="%(class)s_updated"
-    )
-
-    class Meta:
-        abstract = True
 
 
 
 
-class Invoice(BaseAbstractModel, AuditAbstractModel):
-    number = models.CharField(max_length=50, unique=True)  # e.g. INV0025
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name="invoices")
+
+class Invoice(BaseAbstractModel):
+    number = models.CharField(max_length=50, unique=True, blank=True, null=True)
+    patient = models.ForeignKey("Patient", on_delete=models.CASCADE, related_name="invoices")
+    subtotal = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    total_in_words = models.CharField(max_length=255, blank=True, null=True)
     issued_on = models.DateField()
     due_date = models.DateField()
-    
+
     status = models.CharField(
         max_length=20,
         choices=[
@@ -249,15 +247,9 @@ class Invoice(BaseAbstractModel, AuditAbstractModel):
         default="draft",
     )
 
-    # Totals
-    subtotal = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    cgst = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    sgst = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    discount = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-    total_in_words = models.CharField(max_length=255, blank=True, null=True)
+    vat = models.DecimalField(max_digits=12, decimal_places=2, default=0)
 
-    # Extra info
+
     terms = models.TextField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
     signed_by = models.CharField(max_length=100, blank=True, null=True)
@@ -269,21 +261,63 @@ class Invoice(BaseAbstractModel, AuditAbstractModel):
     def __str__(self):
         return f"Invoice {self.number} - {self.patient}"
 
+    def save(self, *args, **kwargs):
+        if not self.number:
+            last_invoice = Invoice.objects.all().order_by("id").last()
+            if last_invoice:
+                last_number = int(last_invoice.number.replace("INV", ""))
+                new_number = last_number + 1
+            else:
+                new_number = 1
+            self.number = f"INV{str(new_number).zfill(4)}"
+        super().save(*args, **kwargs)
+
+
+
+
+
+
+
+
+
 
 class InvoiceItem(BaseAbstractModel):
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="items")
-    product_name = models.CharField(max_length=150)  # e.g. "Full body checkup"
+    product_name = models.CharField(max_length=150)
     description = models.TextField(blank=True, null=True)
     unit_cost = models.DecimalField(max_digits=12, decimal_places=2)
     quantity = models.PositiveIntegerField(default=1)
-    amount = models.DecimalField(max_digits=12, decimal_places=2)
+    amount = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
         return f"{self.product_name} ({self.invoice.number})"
 
     def save(self, *args, **kwargs):
-        # Auto-calc amount
         self.amount = self.unit_cost * self.quantity
         super().save(*args, **kwargs)
+        self.update_invoice_totals()
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        self.update_invoice_totals()
+
+    def update_invoice_totals(self):
+        invoice = self.invoice
+
+        # Get subtotal from all items
+        subtotal = invoice.items.aggregate(total=Sum('amount'))['total'] or Decimal('0.00')
+
+        # Add VAT if applicable
+        total = subtotal + (invoice.vat or Decimal('0.00'))
+
+        # Convert total to words in Naira
+        naira_words = num2words(total, lang='en').replace("euro", "naira").replace("cents", "kobo").title()
+
+        # Update invoice fields
+        invoice.subtotal = subtotal
+        invoice.total = total
+        invoice.total_in_words = f"{naira_words} Only"
+        invoice.save()
+
 
 

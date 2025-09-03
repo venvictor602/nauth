@@ -378,11 +378,11 @@
                                         <i class="ti ti-calendar-check"></i><span>Appointments</span>
                                     </a>
                                 </li>
-                                <li>
+                                {% comment %} <li>
                                     <a href="patient-doctors.html">
                                         <i class="ti ti-stethoscope"></i><span>Doctors</span>
                                     </a>
-                                </li>
+                                </li> {% endcomment %}
                                 <li>
                                     <a href="{%url 'prescription'%}">
                                         <i class="ti ti-prescription"></i><span>Prescriptions</span>
@@ -409,7 +409,7 @@
                                         
                     </ul>                   
                 </div>
-                <div class="sidebar-footer border-top mt-3">
+                {% comment %} <div class="sidebar-footer border-top mt-3">
                     <div class="trial-item mt-0 p-3 text-center">
                         <div class="trial-item-icon rounded-4 mb-3 p-2 text-center shadow-sm d-inline-flex">
                             <img src="assets/img/icons/sidebar-icon.svg" alt="img">
@@ -420,7 +420,7 @@
                         </div>
                         <a href="javascript:void(0);" class="close-icon shadow-sm"><i class="ti ti-x"></i></a>
                     </div>
-                </div>
+                </div> {% endcomment %}
             </div>
 
         </div>

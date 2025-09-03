@@ -145,13 +145,20 @@ def appointment(request):
 
 
 @login_required
-# List all invoices
 def invoice_list(request):
-    invoices = Invoice.objects.all().order_by("-issued_on")
-    return render(request, "patient-invoices.html", {"invoices": invoices})
+    invoices = Invoice.objects.prefetch_related('items').order_by("-issued_on")
+    total_invoices = invoices.count()
+    return render(request, "patient-invoices.html", {
+        "invoices": invoices,
+        "total_invoices": total_invoices
+    })
 
 
 @login_required
 def invoice_detail(request, pk):
-    invoice = get_object_or_404(Invoice, pk=pk)
-    return render(request, "invoices/invoice_detail.html", {"invoice": invoice})
+    invoice = get_object_or_404(Invoice, id=pk)
+    items = invoice.items.all()  # fetch related items
+    return render(request, "patient-invoice-details.html", {
+        "invoice": invoice,
+        "items": items
+    })

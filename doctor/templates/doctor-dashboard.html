@@ -1,0 +1,1036 @@
+{%extends 'base.html'%}
+{%load static%}
+
+{%block content%}
+
+         
+        <div class="page-wrapper">
+
+            <!-- Start Content -->
+            <div class="content pb-0">
+
+                <!-- Page Header -->
+                <div class="d-flex align-items-sm-center justify-content-between flex-wrap gap-2 mb-4">
+                    <div>
+                        <h4 class="fw-bold mb-0">Doctor Dashboard</h4>
+                    </div>
+                    
+				</div>
+				<!-- End Page Header -->
+
+                <!-- row start -->
+            <div class="row">
+
+                                    <!-- col start -->
+                                    <div class="row">
+                <!-- Total Appointments -->
+                <div class="col-xl-3 d-flex">
+                    <div class="card shadow-sm flex-fill w-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div>
+                            <p class="mb-1">Total Appointments</p>
+                            <div class="d-flex align-items-center gap-1">
+                            <h3 class="fw-bold mb-0">{{ total_appointments }}</h3>
+                            <span class="badge fw-medium bg-success flex-shrink-0">
+                                {% if total_appointments > 0 %}+{{ total_appointments }}{% else %}0{% endif %}
+                            </span>
+                            </div>
+                        </div>
+                        <span class="avatar border border-primary text-primary rounded-2 flex-shrink-0">
+                            <i class="ti ti-calendar-heart fs-20"></i>
+                        </span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Pending Appointments -->
+                <div class="col-xl-3 d-flex">
+                    <div class="card shadow-sm flex-fill w-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div>
+                            <p class="mb-1">Pending</p>
+                            <h3 class="fw-bold mb-0 text-warning">{{ pending_appointments }}</h3>
+                        </div>
+                        <span class="avatar border border-warning text-warning rounded-2 flex-shrink-0">
+                            <i class="ti ti-clock fs-20"></i>
+                        </span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- Accepted Appointments -->
+                <div class="col-xl-3 d-flex">
+                    <div class="card shadow-sm flex-fill w-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div>
+                            <p class="mb-1">Accepted</p>
+                            <h3 class="fw-bold mb-0 text-success">{{ accepted_appointments }}</h3>
+                        </div>
+                        <span class="avatar border border-success text-success rounded-2 flex-shrink-0">
+                            <i class="ti ti-check fs-20"></i>
+                        </span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 d-flex">
+                    <div class="card shadow-sm flex-fill w-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div>
+                            <p class="mb-1">Cancelled</p>
+                            <h3 class="fw-bold mb-0 text-danger">{{ cancelled_appointments }}</h3>
+                        </div>
+                        <span class="avatar border border-danger text-danger rounded-2 flex-shrink-0">
+                            <i class="ti ti-thumb-down fs-20"></i>
+                        </span>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+
+                </div>
+
+                    <!-- col end -->
+
+                    <!-- col start -->
+                    
+                    <!-- col end -->
+
+                    {% comment %} <!-- col start -->
+                    <div class="col-xl-4 d-flex">
+                        <div class="card shadow-sm flex-fill w-100">
+                           <div class="card-body">
+                                <div class="d-flex align-items-center justify-content-between mb-3">
+                                    <div>
+                                        <p class="mb-1">Cancelled Appointments</p>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <h3 class="fw-bold mb-0">35</h3>
+                                            <span class="badge fw-medium bg-success flex-shrink-0">+45%</span>
+                                        </div>
+                                    </div>
+                                    <span class="avatar border border-success text-success rounded-2 flex-shrink-0"><i class="ti ti-versions fs-20"></i></span>
+                                </div>
+                                
+                           </div>
+                        </div>
+                    </div>
+                    <!-- col end --> {% endcomment %}
+
+                 </div>
+                <!-- row end -->
+
+                <!-- row start -->
+                {% comment %} <div class="row">
+
+                    <!-- col start -->
+                    <div class="col-xl-4 d-flex">
+                         <!-- card start -->
+                        <div class="card shadow-sm flex-fill w-100">
+                            <div class="card-header d-flex align-items-center justify-content-between">
+                                <h5 class="fw-bold mb-0 text-truncate">Upcoming Appointments</h5> 
+                                <div class="dropdown">
+                                    <a href="javascript:void(0);" class="btn btn-sm px-2 border shadow-sm btn-outline-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                                        Today <i class="ti ti-chevron-down ms-1"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item" href="#">Today</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#">This Week</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#">This Month</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <a href="javascript:void(0);" class="avatar me-2 flex-shrink-0">
+                                        <img src="assets/img/doctors/doctor-01.jpg" alt="img" class="rounded-circle">
+                                    </a>
+                                    <div>
+                                      <h6 class="fs-14 mb-1 text-truncate"><a href="javascript:void(0);" class="fw-semibold">Andrew Billard</a></h6>
+                                      <p class="mb-0 fs-13 text-truncate">#AP455698</p>
+                                    </div>
+                                </div>
+                                <h6 class="fs-14 fw-semibold mb-1">General Visit</h6>
+                                <div class="d-flex align-items-center gap-2 flex-wrap mb-3">
+                                    <p class="mb-0 d-inline-flex align-items-center"><i class="ti ti-calendar-time text-dark me-1"></i>Monday, 31 Mar 2025</p>
+                                    <p class="mb-0 d-inline-flex align-items-center"><i class="ti ti-clock text-dark me-1"></i>06:30 PM </p>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <h6 class="fs-13 fw-semibold mb-1">Department</h6>
+                                        <p>Cardiology</p>
+                                    </div>
+                                    <div class="col">
+                                        <h6 class="fs-13 fw-semibold mb-1">Type</h6>
+                                        <p class="text-truncate">Online Consultation</p>
+                                    </div>
+                                </div>
+                                <div class="my-3 border-bottom pb-3">
+                                    <a href="javascript:void(0);" class="btn btn-primary w-100">Start Appointment</a>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <a href="javascript:void(0);" class="btn btn-dark w-100"><i class="ti ti-brand-hipchat me-1"></i>Chat Now</a>
+                                    <a href="javascript:void(0);" class="btn btn-outline-white w-100"><i class="ti ti-video me-1"></i>Video Consutation</a>
+                                </div>                                
+                            </div>
+                        </div>
+                        <!-- card end -->
+                    </div>
+                    <!-- col end -->
+
+                     <!-- col start -->
+                    <div class="col-xl-8 d-flex">
+                        <!-- card start -->
+                        <div class="card shadow-sm flex-fill w-100">
+                            <div class="card-header d-flex align-items-center justify-content-between">
+                                <h5 class="fw-bold mb-0">Appointments</h5> 
+                                <div class="dropdown">
+                                    <a href="javascript:void(0);" class="btn btn-sm px-2 border shadow-sm btn-outline-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                                        Monthly <i class="ti ti-chevron-down ms-1"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item" href="#">Monthly</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#">Weekly</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#">Yearly</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-body pb-0">
+                                <div class="d-flex align-items-center justify-content-end gap-2 mb-1 flex-wrap mb-3">
+                                    <p class="mb-0 d-inline-flex align-items-center"><i class="ti ti-point-filled me-1 fs-18 text-primary"></i>Total Appointments</p>
+                                    <p class="mb-0 d-inline-flex align-items-center"><i class="ti ti-point-filled me-1 fs-18 text-success"></i>Completed Appointments</p>
+                                </div>
+                                <div class="chart-set" id="s-col-20"></div>
+                            </div>
+                        </div>
+                        <!-- card end -->
+                    </div>
+                    <!-- col end -->
+                </div> {% endcomment %}
+                <!-- row end -->
+
+                <!-- row start -->
+               
+                <!-- row start -->
+
+                <!-- row start -->
+                {% comment %} <div class="row mt-4">
+                    <div class="col-12 d-flex">
+                        <div class="card shadow-sm flex-fill w-100">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="fw-bold mb-0">Recent Appointments</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive table-nowrap">
+                            <table class="table border">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>Date & Time</th>
+                                    <th>Status</th>
+                                    <th>Consultation Fees</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for appt in recent_appointments %}
+                                <tr>
+                                    <td> <i class="ti ti-user text-body fs-20"></i>{{ appt.patient.first_name }} {{ appt.patient.last_name }}</td>
+                                    <td>{{ appt.appointment_date|date:"d M Y - h:i A" }}</td>
+                                    <td>
+                                    {% if appt.status == "PENDING" %}
+                                        <span class="badge bg-warning">Pending</span>
+                                    {% elif appt.status == "ACCEPTED" %}
+                                        <span class="badge bg-success">Accepted</span>
+                                    {% elif appt.status == "REJECTED" %}
+                                        <span class="badge bg-danger">Rejected</span>
+                                    {% elif appt.status == "CANCELLED" %}
+                                        <span class="badge bg-secondary">Cancelled</span>
+                                    {% endif %}
+                                    </td>
+                                    <td>${{ appt.doctor.fee|default:"0" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No recent appointments.</td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div> {% endcomment %}
+
+                <div class="row">
+    <div class="col-12 d-flex">
+        <div class="card shadow-sm flex-fill w-100">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="fw-bold mb-0">Recent Appointments</h5>
+                <div class="dropdown">
+                    <a href="javascript:void(0);" class="btn btn-sm px-2 border shadow-sm btn-outline-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                        Weekly <i class="ti ti-chevron-down ms-1"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Monthly</a></li>
+                        <li><a class="dropdown-item" href="#">Weekly</a></li>
+                        <li><a class="dropdown-item" href="#">Yearly</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <!-- Table start -->
+                <div class="table-responsive table-nowrap">
+                    <table class="table border">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Patient</th>
+                                <th>Date & Time</th>
+                               
+                                <th>Status</th>
+                                <th>Consultation Fees</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for appt in recent_appointments %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="ti ti-user text-body fs-20"></i>
+                                        <div>
+                                            <h6 class="fs-14 mb-1">
+                                                <a href="javascript:void(0);" class="fw-medium">{{ appt.patient.first_name }} {{ appt.patient.last_name }}</a>
+                                            </h6>
+                                            <p class="mb-0 fs-13">{{ appt.patient.phone_number|default:"N/A" }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ appt.appointment_date|date:"d M Y - h:i A" }}</td>
+                                
+                                <td>
+                                    {% if appt.status == "PENDING" %}
+                                        <span class="badge bg-warning">Pending</span>
+                                    {% elif appt.status == "ACCEPTED" %}
+                                        <span class="badge bg-success">Accepted</span>
+                                    {% elif appt.status == "REJECTED" %}
+                                        <span class="badge bg-danger">Rejected</span>
+                                    {% elif appt.status == "CANCELLED" %}
+                                        <span class="badge bg-secondary">Cancelled</span>
+                                    {% else %}
+                                        <span class="badge bg-info">Scheduled</span>
+                                    {% endif %}
+                                </td>
+                                <td class="fw-semibold text-dark">${{ appt.doctor.fee|default:"0" }}</td>
+                                <td>
+                                    <!-- View Button -->
+                                    <a href="javascript:void(0);" 
+                                    class="shadow-sm fs-14 d-inline-flex border rounded-2 p-1 me-1 view-btn"
+                                    data-bs-toggle="offcanvas" 
+                                    data-bs-target="#view_details"
+                                    data-id="{{ appt.id }}"
+                                    data-date="{{ appt.appointment_date|date:'l, d M Y' }}"
+                                    data-time="{{ appt.appointment_date|date:'h:i A' }}"
+                                    data-location="{{ appt.patient.address|default:'N/A' }}"
+                                    data-type="{{ appt.mode|default:'Consultation' }}"
+                                    data-patient="{{ appt.patient.first_name }} {{ appt.patient.last_name }}"
+                                    data-patient-phone="{{ appt.patient.phone_number|default:'N/A' }}"
+                                    data-patient-avatar="{% static 'assets/img/profiles/avatar-06.jpg' %}"
+                                    data-status="{{ appt.status }}">
+                                        <i class="ti ti-eye"></i>
+                                    </a>
+                                    <!-- Edit Button -->
+                                    <a href="javascript:void(0);" 
+                                    class="shadow-sm fs-14 d-inline-flex border rounded-2 p-1 me-1 edit-btn"
+                                    data-bs-toggle="offcanvas" 
+                                    data-bs-target="#edit_appointment"
+                                    data-id="{{ appt.id }}"
+                                    data-patient="{{ appt.patient.first_name }} {{ appt.patient.last_name }}"
+                                    data-type="{{ appt.mode|default:'Consultation' }}"
+                                    data-date="{{ appt.appointment_date|date:'Y-m-d' }}"
+                                    data-time="{{ appt.appointment_date|date:'H:i' }}"
+                                    data-reason="{{ appt.reason }}"
+                                    data-status="{{ appt.status }}">
+                                    <i class="ti ti-edit"></i>
+                                    </a>
+
+
+                                    <!-- Dropdown -->
+                                    {% comment %} <a href="javascript:void(0);" data-bs-toggle="dropdown" 
+                                       class="shadow-sm fs-14 d-inline-flex border rounded-2 p-1">
+                                        <i class="ti ti-dots-vertical"></i>
+                                    </a>
+                                    <ul class="dropdown-menu p-2">
+                                        <li>
+                                            <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center edit-btn"
+                                               data-bs-toggle="offcanvas" data-bs-target="#edit_appointment"
+                                               data-id="{{ appt.id }}">
+                                                <i class="ti ti-edit me-2"></i>Edit
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center"
+                                               data-bs-toggle="modal" data-bs-target="#delete_modal">
+                                                <i class="ti ti-trash me-2"></i>Delete
+                                            </a>
+                                        </li>
+                                    </ul> {% endcomment %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">No recent appointments.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Table end -->
+            </div>
+        </div>
+    </div>
+</div>
+
+{% comment %} <!-- Offcanvas for Edit -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="edit_appointment">
+    <!-- (Use the same edit form you pasted earlier) -->
+    <!-- Replace static fields with dynamic JS later -->
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Edit Appointment</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <!-- Your edit form goes here (the one you pasted) -->
+    </div>
+</div>
+
+<!-- Offcanvas for View -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="view_details">
+    <!-- (Use the same view details panel you pasted earlier) -->
+    <!-- Replace static fields with dynamic JS later -->
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Appointment Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <!-- Your view details section goes here (the one you pasted) -->
+    </div>
+</div> {% endcomment %}
+
+
+                <!-- row end -->
+
+                <!-- row start -->
+                <div class="row">
+
+                    <!-- col start -->
+                    <div class="col-xl-6 d-flex">
+                        <div class="card shadow-sm flex-fill w-100">
+                            <div class="card-header d-flex align-items-center justify-content-between">
+                                <h5 class="fw-bold mb-0">Availability</h5> 
+                                <div class="dropdown">
+                                    <a href="javascript:void(0);" class="btn btn-sm px-2 border shadow-sm btn-outline-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
+                                        Trustcare Clinic <i class="ti ti-chevron-down ms-1"></i>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:void(0);">CureWell Medical Hub</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:void(0);">Trustcare Clinic</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:void(0);">NovaCare Medical</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="javascript:void(0);">Greeny Medical Clinic</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center justify-content-between mb-2 border-bottom pb-2">
+                                    <p class="text-dark fw-semibold mb-0">Mon</p>
+                                    <p class="mb-0 d-inline-flex align-items-center"><i class="ti ti-clock me-1"></i>11:00 PM - 12:30 PM</p>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mb-2 border-bottom pb-2">
+                                    <p class="text-dark fw-semibold mb-0">Tue</p>
+                                    <p class="mb-0 d-inline-flex align-items-center"><i class="ti ti-clock me-1"></i>11:00 PM - 12:30 PM</p>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mb-2 border-bottom pb-2">
+                                    <p class="text-dark fw-semibold mb-0">Wed</p>
+                                    <p class="mb-0 d-inline-flex align-items-center"><i class="ti ti-clock me-1"></i>11:00 PM - 12:30 PM</p>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mb-2 border-bottom pb-2">
+                                    <p class="text-dark fw-semibold mb-0">Thu</p>
+                                    <p class="mb-0 d-inline-flex align-items-center"><i class="ti ti-clock me-1"></i>11:00 PM - 12:30 PM</p>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mb-2 border-bottom pb-2">
+                                    <p class="text-dark fw-semibold mb-0">Fri</p>
+                                    <p class="mb-0 d-inline-flex align-items-center"><i class="ti ti-clock me-1"></i>11:00 PM - 12:30 PM</p>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mb-2 border-bottom pb-2">
+                                    <p class="text-dark fw-semibold mb-0">Sat</p>
+                                    <p class="mb-0 d-inline-flex align-items-center"><i class="ti ti-clock me-1"></i>11:00 PM - 12:30 PM</p>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between mb-2 pb-2">
+                                    <p class="text-dark fw-semibold mb-0">Sun</p>
+                                    <p class="mb-0 d-inline-flex align-items-center text-danger"><i class="ti ti-clock me-1"></i>Closed</p>
+                                </div>
+                                {% comment %} <a href="javascript:void(0);" class="btn btn-light w-100 mt-2 fs-13">Edit Availability</a> {% endcomment %}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- col end -->
+
+                    <!-- col start -->
+                    
+                    <!-- col end -->
+
+                    <!-- col start -->
+                    <div class="col-lg-6 d-flex">
+                        <div class="card shadow-sm flex-fill w-100">
+                            <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="fw-bold mb-0">Top Patients</h5>
+                            
+                            </div>
+                            <div class="card-body">
+                            {% for patient in top_patients %}
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <div class="d-flex align-items-center">
+                                <i class="ti ti-user text-body fs-20"></i>
+                                <div>
+                                    <h6 class="fs-14 mb-1 text-truncate">
+                                    <a href="javascript:void(0);" class="fw-medium">
+                                         {{ patient.patient__first_name }} {{ patient.patient__last_name }}
+                                    </a>
+                                    </h6>
+                                    <p class="mb-0 fs-13 text-truncate"> {{ patient.patient__phone_number }}</p>
+                                </div>
+                                </div>
+                                <span class="badge fw-medium badge-soft-primary border border-primary flex-shrink-0">
+                                {{ patient.total_appointments }} Appointments
+                                </span>
+                            </div>
+                            {% empty %}
+                            <p class="text-muted mb-0">No patients yet.</p>
+                            {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- col end -->
+
+                </div>
+                <!-- row end -->
+                                
+            </div>
+            <!-- End Content -->
+
+            <!-- Footer Start -->
+            <div class="footer text-center bg-white p-2 border-top">
+                <p class="text-dark mb-0">2025 &copy; <a href="javascript:void(0);" class="link-primary">Preclinic</a>, All Rights Reserved</p>
+            </div>
+            <!-- Footer End -->
+
+        </div>
+
+        <!-- ========================
+			End Page Content
+		========================= -->
+
+    </div>
+    <!-- End Wrapper -->
+
+     <!-- Start Add New Appointment -->
+     <div class="offcanvas offcanvas-offset offcanvas-end" tabindex="-1" id="new_appointment">
+        <div class="offcanvas-header d-block pb-0 px-0">
+            <div class="border-bottom d-flex align-items-center justify-content-between pb-3 px-3">
+                <h5 class="offcanvas-title fs-18 fw-bold">New Appointment</h5>
+                <button type="button" class="btn-close custom-btn-close opacity-100" data-bs-dismiss="offcanvas" aria-label="Close"></button></div>
+        </div>
+        <div class="offcanvas-body pt-3">
+            <form action="#">
+                <!-- start row-->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="mb-3">
+                            <label class="form-label mb-1 text-dark fs-14 fw-medium">Appointment ID <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <input type="text" class="form-control rounded bg-light" value="AP234354">
+                            </div>
+                        </div>
+                    </div> <!-- end col-->
+
+                    <div class="col-lg-12">
+                        <div class="mb-3">
+                            <label class="form-label mb-1 text-dark fs-14 fw-medium">Patient<span class="text-danger">*</span></label>
+                            <div class="dropdown">
+                                <a href="javascript:void(0);" class="dropdown-toggle form-control rounded d-flex align-items-center justify-content-between border" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="true">
+                                    Select
+                                </a>
+                                <div class="dropdown-menu shadow-lg w-100 dropdown-info">
+                                    <div class="mb-3">
+                                        <div class="input-icon-start position-relative">
+                                            <span class="input-icon-addon fs-12">
+                                                <i class="ti ti-search"></i>
+                                            </span>
+                                            <input type="text" class="form-control form-control-sm" placeholder="Search">
+                                        </div>
+                                    </div>
+                                    <ul class="mb-3 list-style-none">
+                                        <li>
+                                            <label class="dropdown-item px-2 d-flex align-items-center text-dark">
+                                                <input class="form-check-input m-0 me-2" type="checkbox">
+                                                <span class="avatar avatar-sm rounded-circle me-2"><img src="assets/img/users/user-02.jpg" class="flex-shrink-0 rounded-circle" alt="img"></span>Emily Clark
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="dropdown-item px-2 d-flex align-items-center text-dark">
+                                                <input class="form-check-input m-0 me-2" type="checkbox">
+                                                <span class="avatar avatar-sm rounded-circle me-2"><img src="assets/img/profiles/avatar-01.jpg" class="flex-shrink-0 rounded-circle" alt="img"></span>John Carter
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="dropdown-item px-2 d-flex align-items-center text-dark">
+                                                <input class="form-check-input m-0 me-2" type="checkbox">
+                                                <span class="avatar avatar-sm rounded-circle me-2"><img src="assets/img/profiles/avatar-16.jpg" class="flex-shrink-0 rounded-circle" alt="img"></span>Sophia White
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="dropdown-item px-2 d-flex align-items-center text-dark">
+                                                <input class="form-check-input m-0 me-2" type="checkbox">
+                                                <span class="avatar avatar-sm rounded-circle me-2"><img src="assets/img/profiles/avatar-15.jpg" class="flex-shrink-0 rounded-circle" alt="img"></span>Michael Johnson
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="dropdown-item px-2 d-flex align-items-center text-dark">
+                                                <input class="form-check-input m-0 me-2" type="checkbox">
+                                                <span class="avatar avatar-sm rounded-circle me-2"><img src="assets/img/profiles/avatar-14.jpg" class="flex-shrink-0 rounded-circle" alt="img"></span>Olivia Harris
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="dropdown-item px-2 d-flex align-items-center text-dark">
+                                                <input class="form-check-input m-0 me-2" type="checkbox">
+                                                <span class="avatar avatar-sm rounded-circle me-2"><img src="assets/img/profiles/avatar-01.jpg" class="flex-shrink-0 rounded-circle" alt="img"></span>David Anderson
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end col-->
+
+                    <div class="col-lg-12">
+                        <div class="mb-3">
+                            <label class="form-label mb-1 text-dark fs-14 fw-medium">Appointment Type <span class="text-danger">*</span></label>
+                            <div class="dropdown">
+                                <a href="javascript:void(0);" class="dropdown-toggle form-control rounded d-flex align-items-center justify-content-between border" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="true">
+                                    Select
+                                </a>
+                                <div class="dropdown-menu shadow-lg w-100 dropdown-info">
+                                    <div class="mb-3">
+                                        <div class="input-icon-start position-relative">
+                                            <span class="input-icon-addon fs-12">
+                                                <i class="ti ti-search"></i>
+                                            </span>
+                                            <input type="text" class="form-control form-control-sm" placeholder="Select">
+                                        </div>
+                                    </div>
+                                    <ul class="mb-3 list-style-none">
+                                        <li>
+                                            <label class="dropdown-item px-2 d-flex align-items-center text-dark">
+                                                <input class="form-check-input m-0 me-2" type="checkbox">
+                                                In Person
+                                            </label>
+                                        </li>
+                                        <li class="list-none">
+                                            <label class="dropdown-item px-2 d-flex align-items-center text-dark">
+                                                <input class="form-check-input m-0 me-2" type="checkbox">
+                                                Online
+                                            </label>
+                                        </li>
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end col-->
+
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label class="form-label mb-1 text-dark fs-14 fw-medium"> Date of Appointment <span class="text-danger">*</span></label>
+                            <div class="input-icon-end position-relative">  
+                                <input type="text" class="form-control datetimepicker" placeholder="dd/mm/yyyy">
+                                <span class="input-icon-addon">
+                                    <i class="ti ti-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div> <!-- end col-->
+
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <label class="form-label mb-1 text-dark fs-14 fw-medium"> Time <span class="text-danger">*</span></label>
+                            <div class="input-icon-end position-relative">  
+                                <input type="text" class="form-control timepicker" placeholder="-- : --">
+                                <span class="input-icon-addon">
+                                    <i class="ti ti-clock"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div> <!-- end col-->
+
+                    <div class="col-lg-12">
+                        <div class="mb-3">
+                            <div>
+                                <label class="form-label mb-1 text-dark fs-14 fw-medium">Appointment Reason</label>
+                                <textarea rows="4" class="form-control rounded"> </textarea>
+                            </div>
+                        </div>
+                    </div> <!-- end col-->
+
+                    <div class="col-lg-12">
+                        <div class="mb-3">
+                            <label class="form-label mb-1 text-dark fs-14 fw-medium">Status<span class="text-danger">*</span></label>
+                            <div class="dropdown">
+                                <a href="javascript:void(0);" class="dropdown-toggle form-control rounded d-flex align-items-center justify-content-between border" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="true">
+                                    Select
+                                </a>
+                                <div class="dropdown-menu shadow-lg w-100 dropdown-info">
+                                    <div class="mb-3">
+                                        <div class="input-icon-start position-relative">
+                                            <span class="input-icon-addon fs-12">
+                                                <i class="ti ti-search"></i>
+                                            </span>
+                                            <input type="text" class="form-control form-control-sm" placeholder="Select">
+                                        </div>
+                                    </div>
+                                    <ul class="mb-3 list-style-none">
+                                        <li>
+                                            <label class="dropdown-item px-2 d-flex align-items-center text-dark">
+                                                <input class="form-check-input m-0 me-2" type="checkbox">
+                                                Checked Out
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="dropdown-item px-2 d-flex align-items-center text-dark">
+                                                <input class="form-check-input m-0 me-2" type="checkbox" checked>
+                                                Checked In
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="dropdown-item px-2 d-flex align-items-center text-dark">
+                                                <input class="form-check-input m-0 me-2" type="checkbox">
+                                                Cancelled
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label class="dropdown-item px-2 d-flex align-items-center text-dark">
+                                                <input class="form-check-input m-0 me-2" type="checkbox">
+                                                Scheduled
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end col-->
+                </div>
+                <!-- end row-->
+            </form>
+        </div>
+        <div class="offcanvas-footer mb-1 mt-3 p-3 border-1 border-top">
+            <div class=" d-flex justify-content-end gap-2">
+                <a href="javascript:void(0);" class="btn btn-light btm-md">Cancel</a>
+                <button data-bs-dismiss="offcanvas" class="btn btn-primary btm-md" id="filter-submit">Create Create Appointment</button>
+            </div>
+        </div>
+    </div>
+    <!-- End Add New Appointment-->
+
+    <!-- Start Edit New Appointment -->
+    <!-- Edit Appointment Modal -->
+<div class="offcanvas offcanvas-offset offcanvas-end" tabindex="-1" id="edit_appointment">
+    <div class="offcanvas-header d-block pb-0 px-0">
+        <div class="border-bottom d-flex align-items-center justify-content-between pb-3 px-3">
+            <h5 class="offcanvas-title fs-18 fw-bold"> Edit Appointment</h5>
+            <button type="button" class="btn-close custom-btn-close opacity-100" data-bs-dismiss="offcanvas" aria-label="Close">
+                <i class="ti ti-x bg-white fs-16 text-dark"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="offcanvas-body pt-3">
+        <form id="editAppointmentForm">
+            <input type="hidden" id="appointment_id" name="appointment_id">
+
+            <!-- Appointment ID -->
+            <div class="mb-3">
+                <label class="form-label text-dark fs-14 fw-medium">Appointment ID</label>
+                <input type="text" class="form-control bg-light" id="appointment_code" readonly>
+            </div>
+
+            <!-- Patient -->
+            <div class="mb-3">
+                <label class="form-label text-dark fs-14 fw-medium">Patient</label>
+                <input type="text" class="form-control bg-light" id="patient_name" readonly>
+            </div>
+
+            <!-- Appointment Type -->
+            <div class="mb-3">
+                <label class="form-label text-dark fs-14 fw-medium">Appointment Type</label>
+                <input type="text" class="form-control bg-light" id="appointment_type" readonly>
+            </div>
+
+            <!-- Date -->
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label class="form-label text-dark fs-14 fw-medium">Date</label>
+                        <input type="text" class="form-control bg-light" id="appointment_date" readonly>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="mb-3">
+                        <label class="form-label text-dark fs-14 fw-medium">Time</label>
+                        <input type="text" class="form-control bg-light" id="appointment_time" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reason -->
+            <div class="mb-3">
+                <label class="form-label text-dark fs-14 fw-medium">Reason</label>
+                <textarea class="form-control bg-light" id="appointment_reason" rows="3" readonly></textarea>
+            </div>
+
+            <!-- Editable Status -->
+            <div class="mb-3">
+                <label class="form-label text-dark fs-14 fw-medium">Status <span class="text-danger">*</span></label>
+                <select class="form-select" id="appointment_status" name="status" required>
+                    <option value="PENDING">Pending</option>
+                    <option value="ACCEPTED">Accepted</option>
+                    <option value="REJECTED">Rejected</option>
+                    <option value="CANCELLED">Cancelled</option>
+                </select>
+            </div>
+        </form>
+    </div>
+
+    <div class="offcanvas-footer mb-1 mt-3 p-3 border-1 border-top">
+        <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-light" data-bs-dismiss="offcanvas">Cancel</button>
+            <button type="button" class="btn btn-primary" id="saveAppointmentBtn">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    // Attach click event to all edit buttons
+    document.querySelectorAll(".edit-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            // Get data attributes
+            const id = this.getAttribute("data-id");
+            const patient = this.getAttribute("data-patient");
+            const type = this.getAttribute("data-type");
+            const date = this.getAttribute("data-date");
+            const time = this.getAttribute("data-time");
+            const reason = this.getAttribute("data-reason");
+            const status = this.getAttribute("data-status");
+
+            // Fill modal fields
+            document.getElementById("appointment_id").value = id;
+            document.getElementById("appointment_code").value = "APPT-" + id; 
+            document.getElementById("patient_name").value = patient;
+            document.getElementById("appointment_type").value = type;
+            document.getElementById("appointment_date").value = date;
+            document.getElementById("appointment_time").value = time;
+            document.getElementById("appointment_reason").value = reason;
+            document.getElementById("appointment_status").value = status;
+        });
+    });
+
+    // CSRF helper function
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+            const cookies = document.cookie.split(";");
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie("csrftoken");
+
+    // Save status change
+    document.getElementById("saveAppointmentBtn").addEventListener("click", function () {
+        let form = document.getElementById("editAppointmentForm");
+        let formData = new FormData(form);
+        let appointmentId = formData.get("appointment_id");
+
+        fetch(`/doctor/appointments/update/${appointmentId}/`, {
+            method: "POST",
+            headers: { "X-CSRFToken": csrftoken },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Appointment updated successfully!");
+                location.reload();
+            } else {
+                alert(data.error || "Error updating appointment.");
+            }
+        })
+        .catch(err => {
+            console.error("Fetch error:", err);
+            alert("Something went wrong.");
+        });
+    });
+});
+</script>
+
+
+
+    <!-- End Edit New Appointment-->
+
+    <!-- Start View Details -->
+    <div class="offcanvas offcanvas-offset offcanvas-end" tabindex="-1" id="view_details">
+     <div class="offcanvas-header d-block pb-0 px-0">
+        <div class="border-bottom d-flex align-items-center justify-content-between pb-3 px-3">
+            <h5 class="offcanvas-title fs-18 fw-bold">
+                Appointment Details 
+                <span id="appt_id" class="badge badge-soft-primary border pt-1 px-2 border-primary fw-medium ms-2">#</span>
+            </h5>
+            <button type="button" class="btn-close custom-btn-close opacity-100" data-bs-dismiss="offcanvas" aria-label="Close">
+                <i class="ti ti-x bg-white fs-16 text-dark"></i>
+            </button>            
+        </div>
+    </div>
+
+    <div class="offcanvas-body pt-0 px-0">
+        <h6 class="bg-light py-2 px-3 text-dark fw-bold"> When & Where </h6>
+        <div class="px-3 my-4">
+            <p class="text-dark mb-3 fw-semibold d-flex align-items-center justify-content-between"> 
+                Appointment On <span id="appt_date" class="text-body fw-normal"></span>
+            </p>
+            <p class="text-dark mb-3 fw-semibold d-flex align-items-center justify-content-between"> 
+                Time <span id="appt_time" class="text-body fw-normal"></span> 
+            </p>
+            <p class="text-dark mb-3 fw-semibold d-flex align-items-center justify-content-between"> 
+                Location <span id="appt_location" class="text-body fw-normal"></span> 
+            </p>
+            <p class="text-dark mb-3 fw-semibold d-flex align-items-center justify-content-between"> 
+                Appointment Type <span id="appt_type" class="text-body fw-normal"></span> 
+            </p>
+            <div class="text-dark mb-3 fw-semibold d-flex align-items-center justify-content-between"> 
+                Patient Details 
+                <div class="text-body fw-normal d-flex align-items-center"> 
+                    <span class="avatar avatar-sm">
+                        <img id="appt_patient_avatar" src="" alt="" class="rounded-circle me-1">
+                    </span>
+                    <span id="appt_patient"></span>
+                </div> 
+            </div>
+        </div>
+
+        <h6 class="bg-light py-2 px-3 text-dark fw-bold"> Appointment Details </h6>
+        <div class="px-3 my-4">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-6">
+                    <p class="text-dark"> Status </p>
+                </div>
+                <div class="col-lg-6 col-md-6"> 
+                    <span id="appt_status" class="badge bg-warning">Pending</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- End Add New Appointment-->
+
+    <!-- Start Delete Modal  -->
+    <div class="modal fade" id="delete_modal">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-body text-center position-relative">
+                    <img src="assets/img/bg/delete-modal-bg-01.png" alt="" class="img-fluid position-absolute top-0 start-0 z-0">
+                    <img src="assets/img/bg/delete-modal-bg-02.png" alt="" class="img-fluid position-absolute bottom-0 end-0 z-0">
+                    <div class="mb-3 position-relative z-1">
+                        <span class="avatar avatar-lg bg-danger text-white"><i class="ti ti-trash fs-24"></i></span>
+                    </div>
+                    <h5 class="fw-bold mb-1 position-relative z-1">Delete Confirmation</h5>
+                    <p class="mb-3 position-relative z-1">Are you sure want to delete?</p>
+                    <div class="d-flex justify-content-center">
+                        <a href="javascript:void(0);" class="btn btn-light position-relative z-1 me-3" data-bs-dismiss="modal">Cancel</a>
+                        <a href="#" class="btn btn-danger position-relative z-1" data-bs-dismiss="modal">Yes, Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Delete Modal  -->
+
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const viewButtons = document.querySelectorAll(".view-btn");
+
+    viewButtons.forEach(btn => {
+        btn.addEventListener("click", function() {
+            // Pull data from attributes
+            document.getElementById("appt_id").textContent = "#" + this.dataset.id;
+            document.getElementById("appt_date").textContent = this.dataset.date;
+            document.getElementById("appt_time").textContent = this.dataset.time;
+            document.getElementById("appt_location").textContent = this.dataset.location;
+            document.getElementById("appt_type").textContent = this.dataset.type;
+            document.getElementById("appt_patient").textContent = this.dataset.patient;
+            document.getElementById("appt_patient_avatar").src = this.dataset.patientAvatar;
+
+            // Handle status badge dynamically
+            const statusEl = document.getElementById("appt_status");
+            statusEl.textContent = this.dataset.status;
+
+            statusEl.className = "badge"; // reset
+            switch(this.dataset.status) {
+                case "PENDING": statusEl.classList.add("bg-warning"); break;
+                case "ACCEPTED": statusEl.classList.add("bg-success"); break;
+                case "REJECTED": statusEl.classList.add("bg-danger"); break;
+                case "CANCELLED": statusEl.classList.add("bg-secondary"); break;
+                default: statusEl.classList.add("bg-info"); break;
+            }
+        });
+    });
+});
+</script>
+
+{%endblock content%}
+    

@@ -1,0 +1,19 @@
+1. BUILDING A RIDE APP(LIVE LOCATION HANDLING)
+a. I will usea real time storage like redis geo
+b. data flow usig web socket (channels)
+c. qurying the nearest driver webhich cuisng redis 
+d. i will alo implement things like celery which can be used for background tasking 
+
+2. MAINTAINING THE USER DATA INTERGRITY IN A HEALTH TECH APP
+a. secret and keys will be stored in virtual environment as it relates to database
+b. strong authentication process like the 2FA, JWT
+c. proper logging 
+d. reconfirming the request user and the data being pulled if it matches the request user also
+e. for proper data match adequate use of relationships in the database
+f. indexing of my databse tables or document(relations/document database respectively)
+
+
+3. THINGS TO DO SPEED UP QUERIES AND RETRIVAL TIME 
+a. indexing of the database using things like foreign keys, all forms of joins when neccssary, filter
+b. use database keywords to show slow queries e.g the ANALYZE
+c. proper but not abused use of caching using redis database or the in-memory(from django)

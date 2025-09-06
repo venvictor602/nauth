@@ -109,3 +109,31 @@ def update_appointment(request, pk):
         return JsonResponse({"success": True, "message": "Appointment updated successfully"})
 
     return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
+
+
+
+@login_required
+def doctor_appointment(request):
+    if not hasattr(request.user, "doctor_profile"):
+        return redirect("doctor_login")  # or raise PermissionDenied
+    
+    doctor = request.user.doctor_profile
+    appointments = Appointment.objects.filter(doctor=doctor).order_by("-appointment_date")
+    return render(request, "doctors-appointments.html", {"appointments": appointments})
+
+
+
+@login_required
+def update_appointment_status(request, pk):
+    if request.method == "POST":
+        appointment = get_object_or_404(Appointment, pk=pk, doctor=request.user)
+        new_status = request.POST.get("status")
+
+        if new_status not in dict(Appointment.STATUS_CHOICES):
+            return JsonResponse({"success": False, "error": "Invalid status."})
+
+        appointment.status = new_status
+        appointment.save()
+        return JsonResponse({"success": True})
+
+    return JsonResponse({"success": False, "error": "Invalid request"})

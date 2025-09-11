@@ -1,0 +1,161 @@
+{% extends 'doctor-base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-wrapper">
+    <div class="page-wrapper">
+        <div class="content">
+
+            <!-- Page Header -->
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h4 class="fw-bold mb-0">My Prescriptions</h4>
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h4 class="fw-bold mb-0">My Prescriptions</h4>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPrescriptionModal">
+                    <i class="ti ti-prescription"></i> New Prescription
+                </button>
+            </div>
+
+
+            <div class="table-responsive">
+                <table class="table table-nowrap datatable">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Prescription ID</th>
+                            <th>Patient</th>
+                            <th>Prescribed On</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prescription in prescriptions %}
+                        <tr>
+                            <td>#PRE{{ prescription.id|stringformat:"04d" }}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <i class="ti ti-user fs-20 me-2"></i>
+                                    <span>
+                                        {{ prescription.patient.first_name }} {{ prescription.patient.last_name }}
+                                        <span class="text-muted d-block">ID: {{ prescription.patient.patient_id }}</span>
+                                    </span>
+                                </div>
+                            </td>
+                            <td>{{ prescription.created_at|date:"d M Y" }}</td>
+                            <td class="action-item">
+                                <a href="{% url 'doctor_prescription_detail' prescription.id %}" class="btn btn-sm btn-outline-info">
+                                    <i class="ti ti-eye"></i> 
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">No prescriptions written yet</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="footer text-center bg-white p-2 border-top">
+            <p class="mb-0">2025 &copy; Preclinic</p>
+        </div>
+    </div>
+</div>
+<!-- Add Prescription Modal -->
+<div class="modal fade" id="addPrescriptionModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <form method="post" action="{% url 'doctor_add_prescription' %}">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title">Add Prescription</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+
+          <!-- Patient + Appointment -->
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Patient</label>
+              <select name="patient" class="form-select" required>
+                <option value="">Select patient</option>
+                {% for patient in patients %}
+                <option value="{{ patient.id }}">{{ patient.user.get_full_name }} ({{ patient.patient_id }})</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Appointment (Optional)</label>
+              <select name="appointment" class="form-select">
+                <option value="">Select appointment</option>
+                {% for appt in appointments %}
+                <option value="{{ appt.id }}">#{{ appt.id }} - {{ appt.patient.user.get_full_name }} ({{ appt.appointment_date }})</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <!-- General Info -->
+          <div class="row mb-3">
+            <div class="col-md-4"><input type="text" name="title" class="form-control" placeholder="Title"></div>
+            <div class="col-md-4"><input type="text" name="department" class="form-control" placeholder="Department"></div>
+            <div class="col-md-4"><input type="text" name="consultation_type" class="form-control" placeholder="Consultation Type"></div>
+          </div>
+
+          <!-- Diagnosis + Notes -->
+          <div class="mb-3"><textarea name="diagnosis" class="form-control" placeholder="Diagnosis"></textarea></div>
+          <div class="mb-3"><textarea name="notes" class="form-control" placeholder="Notes"></textarea></div>
+          <div class="mb-3"><textarea name="advice" class="form-control" placeholder="Advice"></textarea></div>
+          <div class="row mb-3">
+            <div class="col-md-8"><textarea name="follow_up_notes" class="form-control" placeholder="Follow up notes"></textarea></div>
+            <div class="col-md-4"><input type="date" name="follow_up_date" class="form-control"></div>
+          </div>
+
+       
+          <!-- Medicines Section -->
+<h6 class="fw-bold mt-3">Medicines</h6>
+<div id="medicineContainer">
+  <div class="row mb-2">
+    <div class="col-md-2"><input type="text" name="medicine_name[]" class="form-control" placeholder="Medicine"></div>
+    <div class="col-md-2"><input type="text" name="dosage[]" class="form-control" placeholder="Dosage"></div>
+    <div class="col-md-2"><input type="text" name="frequency[]" class="form-control" placeholder="Frequency"></div>
+    <div class="col-md-2"><input type="text" name="duration[]" class="form-control" placeholder="Duration"></div>
+    <div class="col-md-2"><input type="text" name="timings[]" class="form-control" placeholder="Timings"></div>
+    <div class="col-md-2"><input type="text" name="instructions[]" class="form-control" placeholder="Instructions"></div>
+  </div>
+</div>
+<button type="button" class="btn btn-sm btn-outline-secondary" onclick="addMedicineRow()">+ Add Medicine</button>
+
+          <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addMedicineRow()">+ Add Medicine</button>
+
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save Prescription</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+function addMedicineRow() {
+  let row = `
+    <div class="row mb-2">
+      <div class="col-md-2"><input type="text" name="medicine_name[]" class="form-control" placeholder="Medicine"></div>
+      <div class="col-md-2"><input type="text" name="dosage[]" class="form-control" placeholder="Dosage"></div>
+      <div class="col-md-2"><input type="text" name="frequency[]" class="form-control" placeholder="Frequency"></div>
+      <div class="col-md-2"><input type="text" name="duration[]" class="form-control" placeholder="Duration"></div>
+      <div class="col-md-2"><input type="text" name="timings[]" class="form-control" placeholder="Timings"></div>
+      <div class="col-md-2"><input type="text" name="instructions[]" class="form-control" placeholder="Instructions"></div>
+    </div>`;
+  document.getElementById("medicineContainer").insertAdjacentHTML("beforeend", row);
+}
+</script>
+
+
+{% endblock %}

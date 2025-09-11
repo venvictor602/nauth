@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
 
-from patients.models import Appointment
+from patients.models import *
 
 def doctor_login_view(request):
     if request.method == "POST":
@@ -137,3 +137,102 @@ def update_appointment_status(request, pk):
         return JsonResponse({"success": True})
 
     return JsonResponse({"success": False, "error": "Invalid request"})
+
+
+
+
+@login_required
+def doctor_prescription_list(request):
+    """List prescriptions for logged-in doctor and allow creating new"""
+    doctor = request.user.doctor_profile
+    prescriptions = Prescription.objects.filter(doctor=doctor).order_by("-created_at")
+
+    # For form dropdowns
+    patients = Patient.objects.all()
+    appointments = Appointment.objects.filter(doctor=doctor)
+
+    return render(request, "doctor_prescription_list.html", {
+        "prescriptions": prescriptions,
+        "patients": patients,
+        "appointments": appointments,
+    })
+
+
+@login_required
+def doctor_add_prescription(request):
+    doctor = request.user.doctor_profile  # doctor is linked via OneToOne to User
+
+    if request.method == "POST":
+        patient_id = request.POST.get("patient")
+        appointment_id = request.POST.get("appointment")
+
+        # Get patient
+        patient = get_object_or_404(Patient, id=patient_id)
+
+        # Appointment is optional
+        appointment = None
+        if appointment_id:
+            appointment = get_object_or_404(Appointment, id=appointment_id, doctor=doctor)
+
+        # Create prescription
+        prescription = Prescription.objects.create(
+            patient=patient,
+            doctor=doctor,
+            appointment=appointment,
+            title=request.POST.get("title"),
+            department=request.POST.get("department"),
+            consultation_type=request.POST.get("consultation_type"),
+            diagnosis=request.POST.get("diagnosis"),
+            notes=request.POST.get("notes"),
+            advice=request.POST.get("advice"),
+            follow_up_notes=request.POST.get("follow_up_notes"),
+            follow_up_date=request.POST.get("follow_up_date") or None,
+        )
+
+        # Medicine fields (lists)
+        medicine_names = request.POST.getlist("medicine_name[]")
+        dosages = request.POST.getlist("dosage[]")
+        frequencies = request.POST.getlist("frequency[]")
+        durations = request.POST.getlist("duration[]")
+        timings = request.POST.getlist("timings[]")
+        instructions = request.POST.getlist("instructions[]")
+
+        # Loop through medicines
+        for med, dose, freq, dur, time, instr in zip(
+            medicine_names, dosages, frequencies, durations, timings, instructions
+        ):
+            if med.strip():  # ensure not empty
+                PrescriptionItem.objects.create(
+                    prescription=prescription,
+                    medicine_name=med,
+                    dosage=dose,
+                    frequency=freq,
+                    duration=dur,
+                    timings=time,
+                    instructions=instr,
+                )
+
+        messages.success(request, "Prescription added successfully!")
+        return redirect("doctor_prescription_list")
+
+    # GET request → show modal form context
+    patients = Patient.objects.filter(appointments__doctor=doctor).distinct()
+    appointments = Appointment.objects.filter(doctor=doctor)
+
+    return render(request, "doctor/add_prescription.html", {
+        "patients": patients,
+        "appointments": appointments,
+    })
+
+
+
+@login_required
+def doctor_prescription_detail(request, pk):
+    """Show detailed view of one prescription (for doctor)"""
+    try:
+        doctor = request.user.doctor_profile
+    except Doctor.DoesNotExist:
+        return render(request, "error.html", {"message": "You are not registered as a doctor."})
+
+    prescription = get_object_or_404(Prescription, pk=pk, doctor=doctor)
+    return render(request, "doctor_prescription_detail.html", {"prescription": prescription})

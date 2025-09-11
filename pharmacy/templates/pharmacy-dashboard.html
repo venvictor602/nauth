@@ -1,0 +1,64 @@
+{% extends "pharmacy-base.html" %}
+{% block content %}
+<div class="main-wrapper">
+  <div class="page-wrapper">
+    <div class="content">
+
+      <!-- Page Header -->
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h4 class="fw-bold mb-0">Pharmacy Dashboard</h4>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-nowrap datatable">
+          <thead class="thead-light">
+            <tr>
+              <th>Prescription ID</th>
+              <th>Patient</th>
+              <th>Doctor</th>
+              <th>Prescribed On</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for pres in prescriptions %}
+            <tr>
+              <td>#PRE{{ pres.id|stringformat:"04d" }}</td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <i class="ti ti-user fs-20 me-2"></i>
+                  <span>
+                    {{ pres.patient.first_name }} {{ pres.patient.last_name }}
+                    <span class="text-muted d-block">ID: {{ pres.patient.patient_id }}</span>
+                  </span>
+                </div>
+              </td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <i class="ti ti-stethoscope fs-20 me-2"></i>
+                  <span>
+                    Dr. {{ pres.doctor.first_name }} {{ pres.doctor.last_name }}
+                    <span class="text-muted d-block">{{ pres.doctor.specialization }}</span>
+                  </span>
+                </div>
+              </td>
+              <td>{{ pres.created_at|date:"d M Y" }}</td>
+              <td class="action-item">
+                <a href="{% url 'pharmacy_prescription_detail' pres.id %}" class="btn btn-sm btn-outline-info">
+                  <i class="ti ti-eye"></i>
+                </a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5" class="text-center text-muted">No prescriptions found</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -81,25 +81,25 @@ WSGI_APPLICATION = 'nauth.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        # 'URL': 'postgresql://postgres:pv2gQE4m0nhX5oSSZkFt@containers-us-west-163.railway.app:7827/railway',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': 'aTrEgQfORZxAdyxoJZPhSjdmxjqELbVs',
-        'HOST': 'caboose.proxy.rlwy.net',
-        'PORT': '41410',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-} 
+}
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         # 'URL': 'postgresql://postgres:pv2gQE4m0nhX5oSSZkFt@containers-us-west-163.railway.app:7827/railway',
+#         'NAME': 'railway',
+#         'USER': 'postgres',
+#         'PASSWORD': 'aTrEgQfORZxAdyxoJZPhSjdmxjqELbVs',
+#         'HOST': 'caboose.proxy.rlwy.net',
+#         'PORT': '41410',
+#     }
+# } 
 # #DATABASE_PUBLIC_URL postgresql://postgres:aTrEgQfORZxAdyxoJZPhSjdmxjqELbVs@caboose.proxy.rlwy.net:41410/railway
 
 
